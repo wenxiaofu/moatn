@@ -1,0 +1,33 @@
+1 file--->new project -->django project可以创建一个django工程
+
+2 配置数据库，默认使用了sqllite，这里使用mysql
+1）在项目文件夹下的_init_.py中导入pymysq包
+import pymysql
+pymysql.install_as_MySQLdb()
+2）修改setting.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'moatd',#数据库名
+        'USER':'moatest',#数据库用户名
+        'PASSWORD':'moatest',#数据库密码
+        'HOST':'200.200.169.215',#数据库地址不写为本地
+        'PORT':'3306' #数据库端口
+    }
+}
+3 创建一个项目进入到项目的目录：D:\moat-->cmd-->python manage.py startapp moatprivate
+创建项目后自动生成：admin.py;apps.py;models.py;tests.py;view.py
+这里项目moatprivate是在工程moat下面，工程文件在moat下面，template可以公用，也可以单独
+
+4 执行python manage.py migrate确认项目是否可用
+前提条件，需要在mysql里面先创建数据库
+主要是连接数据库，创建一些基础管理表格
+出现下面这个错误先不用管
+MySQL Strict Mode is not set for database connection 'default'
+
+5 编写模型层
+moat/settings.py
+配置： 'moatprivate.apps.MoatprivateConfig'
+
+
+
