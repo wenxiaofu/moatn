@@ -29,5 +29,15 @@ MySQL Strict Mode is not set for database connection 'default'
 moat/settings.py
 配置： 'moatprivate.apps.MoatprivateConfig'
 
+5 修改了模型层的数据，需要执行下面的方法，语句才会生效
+python manage.py makemigrations moatprivate
+
+6 写一个后台自动运行程序实时更新一下每一个私有云的状态信息
+
+
+
+admin模块的使用
+https://docs.djangoproject.com/en/1.10/ref/contrib/admin/actions/
+
 
 

@@ -1,0 +1,12 @@
+1 使用layui进行前端框架设计
+
+2 static里面的页面不支持使用{% %}这种方式,只支持js,所以也不支持python的静态文件管理方式，但是支持相对路径获取文件，加载
+页面
+/poll/questions/   就会加载http://127.0.0.1/poll/questions
+
+3 只有templates下面的html文件支持,代码语言{% %}
+  尽量少用或者不用代码语言，使用相对路径和js进行操作
+
+4 10-26备注：现在poll/layui下面的文件没有用到，/css/main.css和lay下面的js都没有用到
+
+5
