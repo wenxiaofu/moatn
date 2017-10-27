@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+        {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'poll/css/layui.css' %}" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>私有云服务</title>
+
+
+  <link rel="stylesheet" href="{% static 'poll/css/layui.css' %}">
+</head>
+<body>
+ 
+<!-- 你的HTML代码 -->
+ 
+<script src="{% static 'poll/layui.js' %}"></script>
+
+    <table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col width="200">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>昵称</th>
+      <th>加入时间</th>
+      <th>签名</th>
+        <th>刷新</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% if latest_question_list %}
+{% for question in latest_question_list %}
+    <tr>
+      <td>{{ question.question_text }}</td>
+      <td>{{ question.pub_date }}</td>
+      <td>{{ question.was_published_recently }}</td>
+
+        <td><a href="http://www.layui.com" class="layui-btn layui-btn-mini ">发送ajax请求</a>
+            <i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#x1002;</i>  </td>
+    </tr>
+   {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+  </tbody>
+</table>
+<script>
+//一般直接写在一个js文件中
+layui.use(['layer', 'form'], function(){
+  var layer = layui.layer
+  ,form = layui.form;
+  
+  layer.msg('Hello World');
+});
+</script> 
+</body>
+</html>
