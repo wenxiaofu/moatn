@@ -1,4 +1,7 @@
 1 使用layui进行前端框架设计
+在django中使用layui
+
+
 
 2 static里面的页面不支持使用{% %}这种方式,只支持js,所以也不支持python的静态文件管理方式，但是支持相对路径获取文件，加载
 页面
@@ -10,3 +13,23 @@
 4 10-26备注：现在poll/layui下面的文件没有用到，/css/main.css和lay下面的js都没有用到
 
 5
+
+已经解决的问题：
+views.getcmd()可以实现将数据库里面查询出来的数据转换成json输出，使用了list，dict和json的方式
+http://127.0.0.1:8000/poll/getcmds/
+可以结合layui的tables实现了私有云的基本业务逻辑
+
+
+后面解决：1 优化上面
+          2 处理前端发过来的json请求view.questions可以处理
+
+无法获取跨站脚本，内网使用，所以注释掉了一行设置
+直接找到settings.py中的'django.middleware.csrf.CsrfViewMiddleware',这一行
+
+与服务端交互，服务端开放某一个端口，通过rpc进行交互
+运维系统
+1 交互式命令
+2 打包命令
+3 监控
+
+1108:完成分页加载功能和搜索功能，排序功能

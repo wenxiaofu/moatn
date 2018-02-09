@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>MOAT测试工具货架</title>
+    <link rel="stylesheet" href="/static/poll/css/layui.css">
+    <script src="/static/poll/layui.js"></script>
+<script>
+//JavaScript代码区域
+layui.use('element', function(){
+  var element = layui.element;
+
+});
+
+
+</script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">MOAT测试</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">常用功能1</a></li>
+      <li class="layui-nav-item"><a href="">常用功能2</a></li>
+      <li class="layui-nav-item"><a href="">常用功能3</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">常用功能4</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">常用功能5</a></dd>
+          <dd><a href="">未定义</a></dd>
+          <dd><a href="">未定义</a></dd>
+        </dl>
+      </li>
+    </ul>
+        <ul class="layui-nav layui-layout-right">
+
+
+      <li class="layui-nav-item layui-hide-xs">
+        <!--预留通过js把整个页面都处理一下-->
+        <a href="/static/poll/page/yingyonglei/viewprotomax.html" target="_blank">1.x</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">测试工具类</a>
+          <dl class="layui-nav-child">
+           <dd><a href="/static/poll/page/testcase/testcasemain.html">s端接口测试</a></dd>
+            <dd><a href="javascript:;">性能测试平台</a></dd>
+            <dd><a href="/static/poll/page/yingyonglei/viewprotobuf.html">protobuf查看</a></dd>
+            <dd><a href="javascript:;">功能模块工具</a></dd>
+            <dd><a href="javascript:;">工具一键推广</a></dd>
+            <dd><a href="javascript:;">数据字段解析</a></dd>
+            <dd><a href="javascript:;">web接口字段</a></dd>
+             <dd><a href="javascript:;">测试工作优化</a></dd>
+               <dd><a href="javascript:;">pb解析成json</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">运维工具类</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">口袋私有云管理</a></dd>
+            <dd><a href="javascript:;">云办公私有云管理</a></dd>
+            <dd><a  href="javascript:;">100集群运维</a></dd>
+             <dd><a href="javascript:;">内网服务器升级</a></dd>
+
+          </dl>
+        </li>
+          <li class="layui-nav-item">
+          <a href="javascript:;">数据库类</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">mongo数据库</a></dd>
+            <dd><a href="javascript:;">mysql数据库</a></dd>
+            <dd><a  href="javascript:;">ES数据库</a></dd>
+          </dl>
+        </li>
+          <li class="layui-nav-item">
+          <a href="javascript:;">在线发布工具</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">在线shell小工具</a></dd>
+            <dd><a href="javascript:;">在线python小工具</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="/static/poll/page/yingyonglei/youqinlianjie.html">友情链接</a>
+          <dl class="layui-nav-child">
+            <dd><a href="/static/poll/page/yingyonglei/testshowdoc.html">测试showdoc平台</a></dd>
+            <dd><a href="/static/poll/page/yingyonglei/webshowdoc.html">前端showdoc平台</a></dd>
+          </dl>
+          </li>
+        <li class="layui-nav-item"><a href="">管理员权限</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layui-body">
+      <!--
+      <iframe src="/static/poll/page/testcase/addcontext.html" frameborder="1" height="900" width="900"> 和 </iframe>
+     -->
+      <iframe src="http://200.200.107.200:8080/index.php?s=/webui&page_id=281" width='100%' height='100%' frameborder='0'> 和 </iframe>      <br>
+      <hr class="layui-bg-green">
+  </div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © 口袋助理测试部
+  </div>
+</div>
+
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+  //执行渲染
+table.render({
+  elem: '#demo' //指定原始表格元素选择器（推荐id选择器）
+  ,height: 500 //容器高度
+  ,url: '/poll/questions/'
+  ,cols:  [[ //标题栏
+    {checkbox: true}
+    ,{field: 'id', title: 'ID', width: 80}
+    ,{field: 'username', title: '用户名', width: 120}
+    ,{field:'title', title: '文章标题', width: 200, templet: '#titleTpl'} //这里的templet值是模板元素的选择器
+    ,{fixed: 'right',title:'操作', width:200, align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+  ]]
+  ,request: {
+  pageName: 'page' //页码的参数名称，默认：page
+  ,limitName: 'limit' //每页数据量的参数名，默认：limit
+}
+  ,response: {
+ // statusName: 'status' //数据状态的字段名称，默认：code
+  //,statusCode: 0 //成功的状态码，默认：0
+ // ,msgName: 'hint' //状态信息的字段名称，默认：msg
+  //,countName: 'total' //数据总数的字段名称，默认：count
+  dataName: 'data' //数据列表的字段名称，默认：data
+}
+ ,page: true //开启分页
+ ,done: function(res, curr, count){
+    //如果是异步请求数据方式，res即为你接口返回的信息。
+    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+    console.log(res);
+
+    //得到当前页码
+    //console.log(curr);
+
+    //得到数据总量
+    console.log(count);
+  }
+
+  //,…… //更多参数参考右侧目录：基本参数选项
+});
+table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+  var data = obj.data; //获得当前行数据
+  var layEvent = obj.event; //获得 lay-event 对应的值
+  var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+  if(layEvent === 'detail'){ //查看
+    //do somehing，弄一个弹窗，显示详情信息
+
+  } else if(layEvent === 'del'){ //删除
+    layer.confirm('真的删除行么', function(index){
+      obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+      layer.close(index);
+      //向服务端发送删除指令
+    });
+  } else if(layEvent === 'edit'){ //编辑
+    //do something向服务端发送保存命令
+    //同步更新缓存对应的值
+    obj.update({
+      username: '123'
+      ,title: 'xxx'
+    });
+  }
+});
+});
+</script>
+<script type="text/html" id="titleTpl">
+  <li><a href="{% url 'poll:detail' 2 %}">111</a></li>
+</script>
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-mini" lay-event="detail">详情</a>
+  <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+  <!-- 这里同样支持 laytpl 语法，如： -->
+  <a class="layui-btn layui-btn-mini" lay-event="check">刷新</a>
+</script>
+</body>
+</html>

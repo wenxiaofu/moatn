@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jQuery bootstrap-select可搜索多选下拉列表插件-www.daimajiayuan.com</title>
+    <script type="text/javascript" src="http://www.daimajiayuan.com/download/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.css">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="/static/poll/css/layui.css">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(window).on('load', function () {
+             $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/testu/",
+            //提交的数据
+            data:'{"action":"GetSrv","data":{"serverip":"","username":"","password":""}}',
+            //返回数据的格式
+          //  datatype: "json",
+            //在请求之前调用的函数
+           // beforeSend:function(){$("#msg").html("logining");},
+            //成功返回之后调用的函数
+            success:function(data){
+                //console.log(data.toString())
+                var jsondata = eval("("+data+")"); //不知道为什么一定要加入这个才可以
+                for(var i = 0;i<jsondata["srv"].length;i++){
+                    $("#bs3Select").append("<option value="+jsondata["srv"][i]["srvcode"]+">"+jsondata["srv"][i]["srvname"]+"</option>")
+
+                }
+                $('#bs3Select').selectpicker('refresh'); //加上这个可以实时刷新，不然不会刷新
+          // $("#msg").html(decodeURI(data));
+            },
+            //调用执行后调用的函数
+            //complete: function(XMLHttpRequest, textStatus){
+              // alert(XMLHttpRequest.responseText);
+               //alert(textStatus);
+                //HideLoading()
+         });
+
+        });
+        $(document).ready(function(){
+            $("#ll").click(function () {
+                alert("ssss")
+            })
+            //下面监听不到select的点击时间，只能监听到div的监听事件
+  $("#interfacediv").click(function(){
+      //这一个效率不太好，后面优化，还有没有共用ssh，导致资源占用很高
+    $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/testu/",
+            //提交的数据
+            data:"{\"action\":\"GetInterface\",\"data\":{\"serverip\":\"\",\"username\":\"\",\"password\":\"\",\"srv\":\""+$("#bs3Select").val()+"\"}}",
+            success:function(data){
+                //console.log(data.toString())
+                console.log(data)
+                var jsondata = eval("("+data+")"); //不知道为什么一定要加入这个才可以
+                for(var i = 0;i<jsondata["srv"].length;i++){
+                    $("#interface").append("<option value="+jsondata["srv"][i]["srvcode"]+">"+jsondata["srv"][i]["srvname"]+"</option>")
+                }
+                $('#interface').selectpicker('refresh'); //加上这个可以实时刷新，不然不会刷新
+            },
+
+         });
+  });
+   $("#interface").change(function () {
+       alert($("#interface").val())
+        $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/testu/",
+            //提交的数据
+            data:"{\"action\":\"GetModel\",\"data\":{\"serverip\":\"\",\"username\":\"\",\"password\":\"\",\"interface\":\""+$("#interface").val()+"\"}}",
+            success:function(data){
+                //console.log(data.toString())
+                console.log(data)
+            },
+
+         });
+            });
+});
+
+
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="bs3Select" class="col-lg-1 control-label">srvcode</label>
+                <div class="col-lg-4" id="testc">
+                    <select id="bs3Select" name= "srvcode" class="selectpicker show-tick form-control" placeholder="" data-live-search="true">
+                        <option value="" selected>srvcode</option>
+                        <!--下面通过ajax去获取和修改-->
+                    </select>
+                </div>
+                <label for="interface" class="col-lg-1 control-label">srvcode</label>
+                <div class="col-lg-4" id="interfacediv">
+                    <select id="interface" name= "interface" class="selectpicker show-tick form-control" placeholder="" data-live-search="true">
+                        <option value="" selected>interface</option>
+                        <!--下面通过ajax去获取和修改-->
+                        <!--加上监控select值的变化，实时获取模板-->
+                    </select>
+                </div>
+              </div>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加私有云</title>
+    <link rel="stylesheet" href="/static/poll/css/layui.css">
+</head>
+<body>
+<br>
+<form class="layui-form" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">服务器</label>
+    <div class="layui-input-block">
+      <input type="text" name="question_text" required  lay-verify="required" style="width:400px;" placeholder="服务器地址" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">ssh账户</label>
+    <div class="layui-input-inline">
+      <input type="password" name="password" required lay-verify="required" placeholder="默认为root" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+    <div class="layui-form-item">
+    <label class="layui-form-label">ssh账户密码</label>
+    <div class="layui-input-inline">
+      <input type="password" name="password" required lay-verify="required" placeholder="默认为moatest" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否需要登陆</label>
+    <div class="layui-input-block">
+
+      <select id="login" name="login" lay-verify="required" lay-filter="logaaa" >
+        <option style="width:400px;" value="0" ></option>
+        <option value="0" selected="selected">是</option>
+        <option id="nologin" value="1">否</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">复选框</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="like[write]" title="写作">
+      <input type="checkbox" name="like[read]" title="阅读" checked>
+      <input type="checkbox" name="like[dai]" title="发呆">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">开关</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="switch" lay-skin="switch">
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">文本域</label>
+    <div class="layui-input-block">
+      <textarea name="desc" placeholder="请输入内容" style="width:400px;" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="formDemo">开始调试</button>
+      <button class="layui-btn" lay-submit lay-filter="formDemo">保存为案例</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <button id="test1" class="layui-btn">弹窗</button>
+    </div>
+  </div>
+</form>
+<script src="/static/poll/layui.js"></script>
+<script>
+//Demo
+layui.use(['form','jquery','layer'], function(){
+  var form = layui.form;
+  var $ = layui.$
+  var layer = layui.layer
+    /*
+     $(document).ready(function () {
+         $('#mySelect').change(function () {
+             alert($(this).children('option:selected').val());
+         })
+     })
+     这个不知道为什么不适用表单里面的选择框
+     */
+    /*
+    这个可以用来监控click事件
+    $('#test1').on('click',function () {
+        alert('ddddhello')
+    });
+    */
+  form.on('select(logaaa)',function (data) {
+      //如果选择否则增加两个输入框
+      if(data.value == 1){
+          //使用jquery添加页面元素
+        alert('ddddhello')
+      }
+  });
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+     htmlobj=$.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/pollc/",
+                data:JSON.stringify({"model":"poll","action":"create","data":data.field}),
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出,但是却无法使用json方法了
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因}
+                success: function(result){
+                alert(result);
+        },
+        error: function (str) {
+
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+    //layer.msg(JSON.stringify(data.field));
+    var values = document.getElementById(loginS1);
+    console.log("dd")
+    console.log(JSON.stringify(data.field));
+    return false;
+  });
+});
+</script>
+</body>
+</html>

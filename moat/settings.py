@@ -25,7 +25,7 @@ SECRET_KEY = '22k0)z$&$+oy#zp%(h+y0)(6ehuw1it%s7+caic%ovqm!$$dre'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,14 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'moatprivate.apps.MoatprivateConfig',
-    'poll.apps.PollConfig'
+    'poll.apps.PollConfig',
+    'moatool.apps.MoatoolConfig'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -79,11 +80,15 @@ WSGI_APPLICATION = 'moat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'moatd',#数据库名
-        'USER':'moatest',#数据库用户名
-        'PASSWORD':'moatest',#数据库密码
-        'HOST':'200.200.169.215',#数据库地址不写为本地
-        'PORT':'3306' #数据库端口
+        'NAME': 'moat',#数据库名
+        'USER':'root',#数据库用户名
+        'PASSWORD':'sangfordb',#数据库密码
+        'HOST':'200.200.169.212',#数据库地址不写为本地
+        'PORT':'3305', #数据库端口
+        #采用非严格模式，这样model里面的字段就不用设置默认值了
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'" ,
+        }
     }
 }
 

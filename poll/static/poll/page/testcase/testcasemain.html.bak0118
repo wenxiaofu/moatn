@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+
+    <title>MOAT测试平台</title>
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="/static/poll/css/demo.css" type="text/css">
+	<link rel="stylesheet" href="/static/poll/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="/static/poll/css/layui.css">
+	<script type="text/javascript" src="/static/poll/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="/static/poll/js/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="/static/poll/js/jquery.ztree.excheck.js"></script>
+    <script src="/static/poll/layui.js"></script>
+	<SCRIPT type="text/javascript">
+
+		<!--
+		var setting = {
+		    check: {
+		enable: true,
+		chkStyle: "checkbox",
+		chkboxType: { "Y" : "ps", "N" : "ps" }
+	},
+		    callback: {
+		onClick: zTreeOnClick
+	},
+		data: {
+				simpleData: {
+					enable: true
+				}
+			}
+		};
+		var zNodes = []
+layui.use(['jquery','layer','form'],function () {
+		    var form = layui.form;
+    var $ = layui.$;
+    var layer = layui.layer;
+    $(document).ready(function(){
+        form.on('submit(formDemo)', function(data){
+      console.log(JSON.stringify(data.field));
+         htmlobj=$.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/testu/",
+                data:JSON.stringify({"action":"debug","data":data.field}),
+
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出,但是却无法使用json方法了
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因}
+                success: function(result){
+                      var tvalue=$("#response").val()
+                      $("#response").val(tvalue+"\n"+result);
+                   // alert(result)
+        },
+        error: function (str) {
+
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+    //layer.msg(JSON.stringify(data.field));
+    console.log(JSON.stringify(data.field));
+   // $("#response").val(result);
+    return false;
+  });
+         $("#addtestcase").click(function(){
+                layer.open({
+                type: 2,
+                content: ['/static/poll/page/testcase/addtestcase.html'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                area: ['900px', '500px']
+                });
+
+});
+         $("#runcases").click(function (data) {
+                runcases();
+            })
+        $("#delcases").click(function (data) {
+                delcases();
+            })
+        $("#addcontext").click(function(){
+                layer.open({
+                type: 2,
+                content: ['/static/poll/page/testcase/addcontext.html'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                area: ['900px', '500px']
+                });
+
+});
+    });
+
+})
+      //  delcases
+        //删除测试案例
+        function delcases() {
+			  var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+		  //  var nodes = zTree.getNodes();//不会做递归
+		    //  var nodes = zTree.getSelectedNodes();
+		      var nodes = zTree.getCheckedNodes();//获取选中的，再获取一下选中的测试案例，不包括目录
+                for(var i = 0;i<nodes.length;i++){
+                  //  alert(nodes[i].id)
+                    $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/poll/caseu/",
+                    //treeNode.id
+                    data: "{\"action\":\"del\",\"id\":"+nodes[i].id+"}",
+                    success: function (result) {
+                        if(result == 1) {
+
+                           // zTree.reAsyncChildNodes(nodes[i], "refresh");
+                         //   zTree.refresh();
+                           zTree.updateNode(nodes[i]); //不知道为什么不能够实现一个一个更新，再研究一下ztree。是因为点击事件没有结束，所以无法刷新，需要优化
+                        }
+                        else {
+
+                        }
+                        console.log(result)
+                    //判断如果一个失败，则把目录的也改了，先判断是否为目录
+                    },
+                    error: function (str) {
+
+                        $("#request-process-patent").html("提交数据失败！");
+                    }
+                });
+
+                }
+		}
+        function runcases() {
+			  var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+		  //  var nodes = zTree.getNodes();//不会做递归
+		    //  var nodes = zTree.getSelectedNodes();
+		      var nodes = zTree.getCheckedNodes();//获取选中的，再获取一下选中的测试案例，不包括目录
+                for(var i = 0;i<nodes.length;i++){
+                  //  alert(nodes[i].id)
+                    $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/poll/caseu/",
+                    //treeNode.id
+                    data: "{\"action\":\"run\",\"id\":"+nodes[i].id+"}",
+                    success: function (result) {
+                        if(result != "None" && result == "案例通过") {
+                            nodes[i].icon = "/static/poll/css/zTreeStyle/img/diy/yes.png";
+                           // zTree.reAsyncChildNodes(nodes[i], "refresh");
+                         //   zTree.refresh();
+                           zTree.updateNode(nodes[i]); //不知道为什么不能够实现一个一个更新，再研究一下ztree。是因为点击事件没有结束，所以无法刷新，需要优化
+                        }
+                        else {
+                            if(result == "案例失败"){
+                             nodes[i].icon = "/static/poll/css/zTreeStyle/img/diy/no.png";
+                             zTree.updateNode(nodes[i]);
+                            }
+
+                        }
+                        console.log(result)
+                    //判断如果一个失败，则把目录的也改了，先判断是否为目录
+                    },
+                    error: function (str) {
+
+                        $("#request-process-patent").html("提交数据失败！");
+                    }
+                });
+
+                }
+		}
+
+//通过这个可以修改案例执行状态，获取选中的案例，没有选中的不执行
+		function refreshNode() {
+		    alert("dd")
+			  var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+		  //  var nodes = zTree.getNodes();//不会做递归
+		    //  var nodes = zTree.getSelectedNodes();
+		      var nodes = zTree.getCheckedNodes();//获取选中的，再获取一下选中的测试案例，不包括目录
+		      alert(nodes.length)
+                for(var i = 0;i<nodes.length;i++){
+                    nodes[i].icon= "/static/poll/css/zTreeStyle/img/diy/4.png";
+                    zTree.updateNode(nodes[i]);
+                    //判断如果一个失败，则把目录的也改了，先判断是否为目录
+                }
+		}
+		//点击时间，onclick
+    function zTreeOnClick(event, treeId, treeNode) {
+      //  alert(treeId+","+treeNode.id + ", " + treeNode.name+","+treeNode.pId);
+         $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/caseu/",
+            //提交的数据
+            data:"{\"action\":\"getdetail\",\"id\":"+treeNode.id+"}",
+            success:function(data){
+                 var jsondata = eval("("+data+")");
+                 alert(data)
+                $("#name").val(jsondata["data"][0]["name"]);
+                 $("#case_dec").val(jsondata["data"][0]["case_dec"]);
+                 $("#descjson").val(jsondata["data"][0]["jsonstr"]);
+                 $("#serverip").val(jsondata["data"][0]["srvip"]);
+                 $("#verify").val(jsondata["data"][0]["verify"]);
+                 $("#username").val(jsondata["data"][0]["username"]);
+                 $("#password").val(jsondata["data"][0]["rootpwd"]);
+                 $("#oprcode").val(jsondata["data"][0]["oprcode"]);
+                 $("#phone").val(jsondata["data"][0]["phone"]);
+                 $("#phonepwd").val(jsondata["data"][0]["phone_pwd"]);
+                $("#response").val(jsondata["reqdec"]);
+
+
+
+                console.log(jsondata["data"][0]["name"])
+            //使用jquery展示一个完整的测试案例，可以修改和编辑，调试，后面弄成分步骤执行的
+          // $("#msg").html(decodeURI(data));
+            },
+         });
+
+    //用来更新右边页面的内容，查看案例的执行结果
+    };
+	//	var nodes = zTree.getSelectedNodes(); //这个是如果有选中的时候用，更新选中的
+		$(document).ready(function(){
+		    $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/caseu/",
+            //提交的数据
+            data:'{"action":"find","model":"all"}',
+            success:function(data){
+                 var jsondata = eval("("+data+")");
+                console.log(data)
+                zNodes = jsondata["data"]
+                console.log(zNodes)
+                console.log("aadd")
+          // $("#msg").html(decodeURI(data));
+            },
+         });
+		//	$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            $("#changeicon").click(function () {
+                refreshNode();
+            })
+             $("#init").click(function () {
+                 //这里要改成异步加载，后面进行优化
+
+             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            })
+		});
+
+		//-->
+	</SCRIPT>
+ </HEAD>
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">MOAT测试平台</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
+
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">所有商品</a>
+          <dl class="layui-nav-child">
+            <dd><a href="/static/poll/page/main.html">私有云管理</a></dd>
+            <dd><a href="/static/poll/page/interfacetest.html">接口调试</a></dd>
+            <dd><a href="/static/poll/page/testcase/testcasemain.html">接口测试</a></dd>
+            <dd><a href="/static/poll/page/jqueryuse.html">jquery</a></dd>
+            <dd><a href="/static/poll/page/addprivate.html">添加私有云</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">解决方案</a>
+          <dl class="layui-nav-child">
+            <dd><a href="/static/poll/page/interfacetest/testJquery.html">测试jquery</a></dd>
+            <dd><a href="/static/poll/page/interfacetest/caseform.html">列表二</a></dd>
+            <dd><a href="">超链接</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">服务端工具平台</a></li>
+        <li class="layui-nav-item"><a href="">私有云管理平台</a></li>
+        <li class="layui-nav-item"><a href="">protobuf查看</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layui-body" style="background:#e2e2e2; color:#2E2D3C">
+    <!-- 内容主体区域 -->
+      <h1><B>server端接口测试案例</B></h1>
+<button id="init">初始化列表</button>
+<button id="addtestcase">添加测试案例</button>
+<button id="addcontext">添加测试套件</button>
+<button id="runcases">运行测试案例</button>
+<button id="delcases">删除案例</button>
+<button id="init">停止运行案例</button>
+      <br>
+      <ul id="treeDemo" class="ztree" style="height:535px;width: 200px"></ul>
+ <div class="layui-body">
+    <!-- 内容主体区域 -->
+
+    <div style="padding: 20px;">
+
+      <form class="layui-form" action="">
+          <div class="layui-form-item">
+    <label class="layui-form-label">案例名称</label>
+    <div class="layui-input-block">
+      <input id="name" type="text" name="name" required lay-verify="required" style="width:400px;" placeholder="案例名称" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">服务器</label>
+    <div class="layui-input-block">
+      <input id="serverip" type="text" name="serverip" required lay-verify="required" style="width:400px;" placeholder="服务器地址" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">ssh账户</label>
+    <div class="layui-input-inline">
+      <input id="username" type="text" name="username" placeholder="默认为root" autocomplete="off" class="layui-input">
+
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+      <label class="layui-form-label">ssh账户密码</label>
+    <div class="layui-input-inline">
+      <input id="password" type="text" name="password" placeholder="默认为moatest" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+          <label class="layui-form-label"><B>步骤1：</B></label>
+    <div id="phoneid" class="layui-form-item">
+    <label class="layui-form-label">手机号</label>
+    <div class="layui-input-inline">
+      <input id="phone" type="text" name="phone" required lay-verify="required" placeholder="11位数字" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+       <label class="layui-form-label">密码</label>
+    <div class="layui-input-inline">
+      <input id="phonepwd" type="text" name="phonepwd" required lay-verify="required" value="123456" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+    <div id="srvcode" class="layui-form-item">
+    <label class="layui-form-label">操作码</label>
+    <div class="layui-input-inline">
+      <input id="oprcode" type="text" name="oprcode" required lay-verify="required" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+        <label class="layui-form-label">校验字段</label>
+    <div class="layui-input-inline">
+      <input id="verify" type="text" name="verify" placeholder="多个使用分号隔开" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">请求json</label>
+    <div class="layui-input-block">
+      <textarea id="descjson" name="descjson" placeholder="请输入内容" style="width:530px;" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">上次执行结果</label>
+    <div class="layui-input-block">
+      <textarea id="response" name="Reqdescjson" placeholder="" style="width:530px;" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">开始调试</button>
+      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">保存为案例</button>
+      <button type="button" type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <button id="test1" class="layui-btn">弹窗</button>
+    </div>
+  </div>
+</form>
+
+    </div>
+  </div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © 口袋助理测试
+  </div>
+</div>
+</div>
+  </div>
+</HTML>

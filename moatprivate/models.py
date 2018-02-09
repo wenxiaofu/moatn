@@ -7,6 +7,7 @@ class Privatec(models.Model):
     """
      私有云
     """
+    #数据库的模式没有改，需要有个默认值后面改一下
     srv_id = models.IntegerField("私有云id",default=0)
     name = models.CharField(max_length=200,default="defaultname")
     status = models.CharField(max_length=200,default="not know")

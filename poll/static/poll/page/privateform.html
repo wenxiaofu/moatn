@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加私有云</title>
+    <link rel="stylesheet" href="/static/poll/css/layui.css">
+
+</head>
+<body>
+<br>
+<form class="layui-form" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">srv_id</label>
+    <div class="layui-input-block">
+      <input type="text" name="srv_id" required  lay-verify="required" style="width:400px;" placeholder="请输入标题" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+     <div class="layui-form-item">
+    <label class="layui-form-label">私有云名称</label>
+    <div class="layui-input-block">
+      <input type="text" name="name" required  lay-verify="required" style="width:400px;" placeholder="请输入标题" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+      <div class="layui-form-item">
+    <label class="layui-form-label">用户ip地址</label>
+    <div class="layui-input-block">
+      <input type="text" name="pc_ip" style="width:400px;" placeholder="请输入标题" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+<div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-block">
+      <textarea name="nothers" placeholder="请输入内容" style="width:400px;" class="layui-textarea"></textarea>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+<script src="/static/poll/layui.js"></script>
+<script>
+//Demo
+layui.use(['form','jquery'], function(){
+  var form = layui.form;
+  var $ = layui.$
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+     htmlobj=$.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/pollc/",
+                data:JSON.stringify({"model":"private","action":"create","data":data.field}),
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出,但是却无法使用json方法了
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因}
+                success: function(result){
+                alert(result);
+        },
+        error: function (str) {
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+    //layer.msg(JSON.stringify(data.field));
+    console.log(JSON.stringify(data.field));
+    return false;
+  });
+});
+</script>
+</body>
+</html>

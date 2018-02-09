@@ -1,12 +1,83 @@
 from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.template import loader
 from django.http import HttpResponseRedirect
 from .models import *
 from django.core.urlresolvers import reverse
-
+from poll.mfunc.sshclient import verification_ssh
+from poll.mfunc.routing import routing
+from poll.mfunc.Interfaceroute import Interfacerouting
+from poll.mfunc.caseroutec import Caseroutec
+import json
+from poll.mfunc.private.PrivateRoute import privateR
+from django.forms.models import model_to_dict
+from django.core import serializers
 from django.http import Http404
 # Create your views here.
+
+class CJsonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%Y-%m-%d %H:%M:%S')
+        # elif isinstance(obj, date):
+        #     return obj.strftime('%Y-%m-%d')
+        else:
+            return json.JSONEncoder.default(self, obj)
+#实现了接收json，根据json设置路由，返回不同的值
+def recjson(request):
+    if request.method == 'POST':
+        print(request.body.decode('utf-8'))
+        received_json_data = json.loads(request.body.decode('utf-8'))
+        # received_json_data = json.loads(request.POST)
+        print(received_json_data)
+        print(received_json_data.keys())
+        print(received_json_data["count"])
+        print(len(received_json_data["data"]))
+        print(received_json_data["data"][1])
+        return HttpResponse(request.body.decode('utf-8'))
+    else:
+        return HttpResponse("参数错误")
+
+    # 业务处理
+def pollc(request):
+    if request.method == 'POST':
+        print(request.body.decode('utf-8'))
+        # received_json_data = json.loads(request.POST)
+        return HttpResponse(routing(request.body.decode('utf-8')))
+    else:
+        return HttpResponse("参数错误")
+
+
+#将查询出来的数据转换成json传给前端
+def getcmd(request):
+    # python2json = {}
+    # python2json["data"]
+    # Qs = Questions
+    # djson = json.dumps(Qs, ensure_ascii=False)
+    # print(djson)
+    #http://blog.csdn.net/qq_24861509/article/details/49172945
+    # cmd_list = cmds.objects.all()
+    # context = {"cmd_list":cmd_list}
+    #下面是可以返回想要的结果
+    #http://blog.csdn.net/tterminator/article/details/63289400
+    latest_question_list = Question.objects.order_by('-pub_date').values("qid","question_text")
+    latest_question_list = list(latest_question_list)
+    python2json = {}#创建一个字典类型
+    python2json["data"] = latest_question_list
+    python2json["count"] = len(latest_question_list)
+    python2json["msg"] = ""
+    python2json["code"] = 0
+    data = json.dumps(python2json,ensure_ascii=False)
+    print(data)
+    # print(latest_question_list)
+    # #这里还有一个中文编码的问题没有解决，返回的是16进制字节码，可以自己解析，应该转码的时候就可以解决
+    # #使用python的序列化和反序列化
+    # data = serializers.serialize("json",latest_question_list)
+    # # context = list(latest_question_list)
+    #
+    # # data = json.dumps(context)
+    # print(data)
+    return HttpResponse(data)
 
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -35,12 +106,53 @@ def questions(request):
     '''
     return HttpResponse(string1)
 def lay(request):
+     #
+     qss = Question(question_text="testweew")
+     print(qss)
      return render(request, 'poll/lay.html')
+
+def testu(request):
+    if request.method == 'POST':
+        print(request.body.decode('utf-8'))
+        # received_json_data = json.loads(request.POST)
+        return HttpResponse(Interfacerouting(request.body.decode('utf-8')))
+    else:
+        return HttpResponse("参数错误")
+
+def caseu(request):
+    if request.method == 'POST':
+        print(request.body.decode('utf-8'))
+        # received_json_data = json.loads(request.POST)
+        return HttpResponse(Caseroutec(request.body.decode('utf-8')))
+    else:
+        return HttpResponse("参数错误")
+def private(request):
+    if request.method == 'POST':
+        print(request.body.decode('utf-8'))
+        # received_json_data = json.loads(request.POST)
+        print("-----------------")
+        pv = privateR()
+        return HttpResponse(privateR.Privateroute(pv,request.body.decode('utf-8')))
+    elif request.method == 'GET':
+        python2json = {}  # 创建一个字典类型
+        python2json["action"] = request.GET.get("action")
+        python2json["page"] = request.GET.get("page")
+        python2json["limit"] = request.GET.get("limit")
+        python2json["code"] = 0
+        data = json.dumps(python2json, ensure_ascii=False)
+        pv = privateR()
+        return HttpResponse(privateR.Privateroute(pv, data))
+    else:
+        return HttpResponse("参数错误")
+
+def sedsshcmd(request):
+    return HttpResponse(verification_ssh('200.200.169.212', 'root', 'moatest', 22, 'OrYuWFHeLDBtgX1BitJu', 'mdbg -p 21024 -o exportdomain;ifconfig'))
 
 def layuitable(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {'latest_question_list': latest_question_list}
     return render(request, 'poll/layuitable.html', context)
+
 def vote(request, question_id):
     p = get_object_or_404(Question, pk=question_id)
     try:

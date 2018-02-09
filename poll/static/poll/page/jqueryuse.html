@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+
+<button id="b01" type="button">创建问题</button>
+<button id="b02" type="button">删除问题</button>
+<button id="b03" type="button">编辑问题</button>
+<button id="b04" type="button">实时获取信息更新</button>
+<button id="b05" type="button">实时获取信息追加</button>
+<button id="b06" type="button">发送命令给服务端执行</button>
+<br>
+<br>
+<textarea id="t01" rows="30" cols="150">
+我是一个文本框。
+</textarea>
+<script>
+    //成功的轮询方式http://blog.csdn.net/wlzx120/article/details/73550864，之前的不知道为什么失败了，需要考虑一下
+    function sleep(d){
+    for(var t = Date.now();Date.now() - t <= d;);
+    };
+    //使用ajax轮询实时更新数据，数据可以保存到数据库里面https://segmentfault.com/a/1190000005032908
+     var getting = {
+        type:"post",
+        async:false,
+        url:'/poll/pollc/',
+        data:'{"model":"poll","action":"create","data":{"qid":"firstwebQuestion第一个"}}',
+        //dataType:'json',
+        success:function(res) {
+           // alert(res);
+            $("#t01").val(res);
+            console.log(res);
+       //  sleep(100000)
+     //    $.ajax(getting); //关键在这里，回调函数内再次请求Ajax
+        },
+        //当请求时间过长（默认为60秒），就再次调用ajax长轮询
+        error:function(res){
+        $.ajax($getting);
+        }
+};
+      var add = {
+        type:"post",
+        async:false,
+        url:'/poll/pollc/',
+        data:'{"model":"poll","action":"create","data":{"qid":"firstwebQuestion第一个"}}',
+        //dataType:'json',
+        success:function(res) {
+            var tvalue=$("#t01").val()
+            $("#t01").val(tvalue+"\n"+res);
+            console.log(res);
+          //  sleep(10000)//赋值以后如果加了sleep，就会很刷新不太及时
+        //$.ajax(add); //关键在这里，回调函数内再次请求Ajax
+        },
+        //当请求时间过长（默认为60秒），就再次调用ajax长轮询
+        error:function(res){
+        $.ajax(add);
+        }
+};
+      var runcmd = {
+        type:"post",
+        async:false,
+        url:'/poll/sedsshcmd/',
+       // data:'{"model":"poll","action":"create","data":{"qid":"firstwebQuestion第一个"}}',
+        //dataType:'json',
+        success:function(res) {
+            var tvalue=$("#t01").val()
+            $("#t01").val(tvalue+"\n"+res);
+            console.log(res);
+          //  sleep(10000)//赋值以后如果加了sleep，就会很刷新不太及时
+        //$.ajax(add); //关键在这里，回调函数内再次请求Ajax
+        },
+        //当请求时间过长（默认为60秒），就再次调用ajax长轮询
+        error:function(res){
+        $.ajax(add);
+        }
+};
+      function test() {
+          $.ajax(add);
+      }
+      function runc() {
+          $.ajax(runcmd)
+      }
+    $(document).ready(function(){
+        $("#b04").click(function(){
+           $.ajax(getting);
+        });
+         $("#b05").click(function(){
+             setInterval("test()",2000);
+        });
+         $("#b06").click(function(){
+             runc()
+        });
+        $("#b01").click(function(){
+              htmlobj=$.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/pollc/",
+                data:'{"model":"poll","action":"create","data":{"qid":"firstwebQuestion第一个"}}',
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因
+                success: function(result){
+                $("#t01").val(result);
+                alert(result);
+        },
+        error: function (str) {
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+        });
+        $("#b02").click(function(){
+              htmlobj=$.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/pollc/",
+                data:'{"model":"poll","action":"del","data":{"pid":"2"}}',
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因
+                success: function(result){
+                alert(result);
+        },
+        error: function (str) {
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+        });
+          $("#b03").click(function(){
+              htmlobj=$.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/pollc/",
+                data:'{"model":"poll","action":"edit","data":{"qid":"4","question_text":"编辑一下n第一个"}}',
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因
+                success: function(result){
+                alert(result);
+        },
+        error: function (str) {
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+        });
+    });
+
+</script>
+
+</body>
+</html>

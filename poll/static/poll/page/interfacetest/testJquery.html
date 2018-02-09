@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/JavaScript">
+function aa(e){alert("inputting!!");}
+</script>
+
+<input type="text" id="a" oninput="aa(event)" onporpertychange="aa(event)" />
+<script src="/static/poll/layui.js"></script>
+<script language="javascript" type="text/javascript">
+
+ layui.use(['form','jquery','layer'], function() {
+    // var form = layui.form;
+     var $ = layui.$
+     $(document).ready(function () {
+         $('#mySelect').change(function () {
+             alert($(this).children('option:selected').val());
+         })
+     })
+ })
+</script>
+
+<select id="mySelect">
+<option value="1">one</option>
+<option value="2" selected="selected">two</option>
+<option value="3">three</option>
+</select>
+</body>
+</html>

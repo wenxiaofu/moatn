@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加私有云</title>
+    <link rel="stylesheet" href="/static/poll/css/layui.css">
+</head>
+<body>
+<br>
+<form class="layui-form" action="">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">使用期限</label>
+    <div class="layui-input-inline">
+      <input type="text" name="deadline" required lay-verify="required" placeholder="使用期限，多少年" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+      <label class="layui-form-label">人数</label>
+    <div class="layui-input-inline">
+      <input type="text" name="num" required lay-verify="required" placeholder="人数" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+    <div class="layui-form-item">
+    <label class="layui-form-label">是否同步通讯录</label>
+    <div class="layui-input-block">
+      <select name="sync" lay-verify="required" lay-filter="logaaa" style="width: 10px">
+        <option value="1" ></option>
+        <option value="0">同步</option>
+        <option value="1" selected="selected">不同步</option>
+      </select>
+    </div>
+  </div>
+    <div class="layui-form-item">
+    <label class="layui-form-label">接入方式</label>
+    <div class="layui-input-block">
+      <select name="installway" lay-verify="required" lay-filter="logaaa" style="width: 10px">
+        <option value="2">使用端口号</option>
+        <option value="1">使用ip</option>
+      </select>
+    </div>
+  </div>
+     <div class="layui-form-item">
+    <label class="layui-form-label">接入外网ip</label>
+    <div class="layui-input-inline">
+      <input type="text" name="privateip" placeholder="端口接入可不填" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+         <label class="layui-form-label">端口号</label>
+    <div class="layui-input-inline">
+      <input type="text" name="port" placeholder="默认6802可不填" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+     <div class="layui-form-item">
+    <label class="layui-form-label">网卡</label>
+    <div class="layui-input-inline">
+      <input type="text" name="eth" placeholder="默认eth0" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+         <label class="layui-form-label">客户名称</label>
+    <div class="layui-input-inline">
+      <input type="text" name="name" placeholder="默认moa+创建时间" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+      <div class="layui-form-item">
+    <div class="layui-input-block">
+         <button class="layui-btn layui-btn-small" lay-submit lay-filter="formDemo">注册私有云</button>
+    </div>
+  </div>
+    <hr class="layui-bg-green">
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">响应结果</label>
+    <div class="layui-input-block">
+      <textarea id="response" name="Reqdescjson" placeholder="请输入内容" style="width:600px;height: 300px" class="layui-textarea"></textarea>
+    </div>
+  </div>
+
+</form>
+<script src="/static/poll/layui.js"></script>
+<script>
+//Demo
+layui.use(['form','jquery','layer'], function(){
+  var form = layui.form;
+  var $ = layui.$
+  var layer = layui.layer
+    /*
+     $(document).ready(function () {
+         $('#mySelect').change(function () {
+             alert($(this).children('option:selected').val());
+         })
+     })
+     这个不知道为什么不适用表单里面的选择框
+     */
+    /*
+    这个可以用来监控click事件
+    $('#test1').on('click',function () {
+        alert('ddddhello')
+    });
+    */
+  form.on('select(logaaa)',function (data) {
+
+      //如果选择否则增加两个输入框
+      if(data.value == 1){
+          //使用jquery添加页面元素
+        $("#phoneid").hide();
+       // $("#phonepwd").remove();remove找不回来，用hide
+        $("#phonepwd").hide();
+      }else {
+        $("#phoneid").show();
+        $("#phonepwd").show();
+      }
+
+  });
+  /*
+  form.on('tool(getmodel)',function () {
+        layer.open({
+                type: 2,
+                content: ['/static/poll/page/interfacetest/testJquery.html'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                area: ['900px', '600px']
+                });
+    });
+    */
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+      console.log(JSON.stringify(data.field));
+     htmlobj=$.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/private/",
+                data:JSON.stringify({"action":"Regprivate","data":data.field}),
+
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出,但是却无法使用json方法了
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因}
+                success: function(result){
+                $("#phoneid").hide();
+                $("#response").val(result);
+                console.log(result)
+        },
+        error: function (str) {
+
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+    //layer.msg(JSON.stringify(data.field));
+    console.log(JSON.stringify(data.field));
+   // $("#response").val(result);
+    return false;
+  });
+});
+
+
+</script>
+</body>
+</html>

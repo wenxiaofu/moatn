@@ -46,9 +46,9 @@
         <li class="layui-nav-item layui-nav-itemed">
           <a class="" href="javascript:;">所有商品</a>
           <dl class="layui-nav-child">
-            <dd><a href="/static/poll/page/main.html">列表一</a></dd>
-            <dd><a href="/static/poll/page/main.html">列表二</a></dd>
-            <dd><a href="javascript:;">列表三</a></dd>
+            <dd><a href="/static/poll/page/main.html">私有云管理</a></dd>
+            <dd><a href="/static/poll/page/main.html">接口调试</a></dd>
+            <dd><a href="javascript:;">快捷维护</a></dd>
             <dd><a href="">超链接</a></dd>
           </dl>
         </li>
@@ -70,6 +70,42 @@
     <!-- 内容主体区域 -->
 
       <div class="layui-row">
+          <!--下面这些通过jquery添加，动态添加，从数据库获取，model里面增加命令集选项-->
+          <br>
+          口袋助理服务端快速命令集合
+          <br>
+          <hr class="layui-bg-green">
+              <form class="layui-form" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">服务器</label>
+    <div class="layui-input-inline">
+      <input type="text" name="title" required  lay-verify="required" placeholder="200.200.169.100" autocomplete="on" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">root密码</label>
+    <div class="layui-input-inline">
+      <input type="password" name="password" required lay-verify="required" placeholder="moatest"  value="moatest" autocomplete="on" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux">默认moatest</div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">复选框</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="like[write]" title="写作">
+      <input type="checkbox" name="like[read]" title="阅读">
+      <input type="checkbox" name="like[dai]" title="发呆">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="formsaved">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">保存（nousefornow）</button>
+
+    </div>
+  </div>
+</form>
+
           <a href="/static/poll/page/main.html" class="layui-btn">集群环境体检</a>
           <a href="/static/poll/page/main.html" class="layui-btn">集群环境体检</a>
           <a href="/static/poll/page/main.html" class="layui-btn">集群环境体检</a>
@@ -77,34 +113,26 @@
           <textarea class="site-demo-text" id="testmain" hidden>layer.open({
               title: '在线调试'
               ,type:2
-              ,content: '/poll/questions/'
+              ,content: '/poll/sedsshcmd/'
                 });
-
   </textarea>
 
       </div>
       <br>
-       <div class="layui-row">
-    <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
-      <a href="/static/poll/page/main.html" class="layui-btn">一个可跳转的按钮</a>
-    </div>
-            </div>
-            <dd><a href="/static/poll/page/main.html" class="layui-btn">一个可跳转的按钮</a></dd>
-            <dd><a href="javascript:;">列表二</a></dd>
-            <dd><a href="">超链接</a></dd>
+      <hr class="layui-bg-green">
        <form class="layui-form" action="">
   <div class="layui-form-item">
     <label class="layui-form-label">服务器</label>
-    <div class="layui-input-block">
-      <input type="text" name="title" required  lay-verify="required" placeholder="200.200.169.100" autocomplete="off" class="layui-input">
+    <div class="layui-input-inline">
+      <input type="text" name="title" required  lay-verify="required" placeholder="200.200.169.100" autocomplete="on" class="layui-input">
     </div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">密码</label>
+    <label class="layui-form-label">root密码</label>
     <div class="layui-input-inline">
-      <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+      <input type="password" name="password" required lay-verify="required" placeholder="moatest"  value="moatest" autocomplete="on" class="layui-input">
     </div>
-    <div class="layui-form-mid layui-word-aux">辅助文字</div>
+    <div class="layui-form-mid layui-word-aux">默认moatest</div>
   </div>
   <div class="layui-form-item layui-form-text">
     <label class="layui-form-label">命令集</label>
@@ -115,7 +143,8 @@
   <div class="layui-form-item">
     <div class="layui-input-block">
       <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <button type="reset" class="layui-btn layui-btn-primary">保存（nousefornow）</button>
+
     </div>
   </div>
 </form>
@@ -128,17 +157,41 @@
   </div>
 </div>
 <script src="/static/poll/layui.js"></script>
+
 <script>
 //JavaScript代码区域
+layui.use('jquery', function(){
+  var $ = layui.jquery;
+  $.post('/poll/getcmds/', {}, function(str){
+  alert(str)
+});
+ //  $.post('/poll/recjson/', {"data":1,"test":12}, function(str){
+ // alert(str)
+//});
+     $.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/recjson/",
+                data:{"data":21332,"test":123123},
+              // dataType: "json",
+                success: function (message) {
+                alert(message);
+        },
+        error: function (message) {
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+});
 layui.use('element', function(){
   var element = layui.element;
 
 });
+
 layui.use('layer', function(){
   var layer = layui.layer;
   layer.config({
   skin: 'demo-class'
-      ,area: ['500px', '300px']
+      ,area: ['1000px', '600px']
       ,offset: 'rb'
 })
 
@@ -152,7 +205,14 @@ layui.use('form', function(){
     layer.msg(JSON.stringify(data.field));
     return false;
   });
+    form.on('submit(formsaved)', function(data){
+    layer.msg(JSON.stringify(data.field));
+    return false;
+  });
 });
+
+
 </script>
+
 </body>
 </html>

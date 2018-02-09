@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Bootstrap 实例 - 内联表单</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.css">
+</head>
+<body>
+<br>
+
+<form id="debugform" class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="firstname" class="col-sm-1 control-label">目录名</label>
+    <div class="col-sm-4">
+      <input name="case_name" type="text" class="form-control" id="firstname" placeholder="目录名称">
+    </div>
+  </div>
+ <div class="form-group">
+    <label for="logina" class="col-sm-1 control-label">上一级目录</label>
+         <div class="col-sm-4">
+     <select id="bs3Select" name="parent_id" class="selectpicker show-tick form-control" placeholder="" data-live-search="true">
+                        <option value=0 selected>无</option>
+                        <!--下面通过ajax去获取和修改-->
+                    </select>
+         </div>
+ </div>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+        <button id="submit" type="button" class="btn btn-primary">保存</button>
+        <!--不加type会自动更新-->
+    </div>
+  </div>
+</form>
+<script type="text/javascript">
+        $(window).on('load', function () {
+             $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/caseu/",
+            //提交的数据
+            data:'{"action":"find","model":"context"}',
+            //返回数据的格式
+          //  datatype: "json",
+            //在请求之前调用的函数
+           // beforeSend:function(){$("#msg").html("logining");},
+            //成功返回之后调用的函数
+            success:function(data){
+                console.log(data)
+                //console.log(data.toString())
+                var jsondata = eval("("+data+")"); //不知道为什么一定要加入这个才可以
+                for(var i = 0;i<jsondata["data"].length;i++){
+                    $("#bs3Select").append("<option value="+jsondata["data"][i]["case_id"]+">"+jsondata["data"][i]["name"]+"</option>")
+
+                }
+                $('#bs3Select').selectpicker('refresh'); //加上这个可以实时刷新，不然不会刷新
+          // $("#msg").html(decodeURI(data));
+            },
+            //调用执行后调用的函数
+            //complete: function(XMLHttpRequest, textStatus){
+              // alert(XMLHttpRequest.responseText);
+               //alert(textStatus);
+                //HideLoading()
+         });
+
+        });
+        $(document).ready(function() {
+            //发送请求数据
+            $("#submit").click(function (data) {
+                //  var data = $("#debugform").serialize()
+                var data = $("#debugform").serializeArray()
+                var obj = {};
+                $.each(data, function (i, v) {
+                    obj[v.name] = v.value;
+                })
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/poll/caseu/",
+                    data: JSON.stringify({"action": "create", "model": "context", "data": obj}),
+
+                    //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                    //上面加上单引号，可以中文输出,但是却无法使用json方法了
+                    //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因}
+                    success: function (result) {
+                        console.log(result)
+                        alert("保存成功")
+                    },
+                    error: function (str) {
+
+                        $("#request-process-patent").html("提交数据失败！");
+                    }
+                });
+            })
+        });
+
+    </script>
+</body>
+</html>

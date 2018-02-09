@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="/static/poll/css/layuimy.css">
+  <div class="layui-body">
+      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>MOA内部友情链接</legend>
+</fieldset>
+
+<div class="layui-form">
+  <table class="layui-table">
+    <colgroup>
+      <col width="150">
+      <col width="150">
+      <col width="200">
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+        <th>描述</th>
+        <th>地址</th>
+        <th>备注</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><a  href="http://200.200.107.38/" target="_blank">需求管理平台</a></td>
+        <td><a  href="http://200.200.107.38/" style="color: #01AAED" target="_blank">http://200.200.107.38/</a></td>
+        <td>1 查看需求，下发的需求都要归档到这里面；2 下载安装包；3 部门制度</td>
+      </tr>
+    <tr>
+        <td><a  href="http://200.200.169.163/" target="_blank">redmine</a></td>
+        <td><a  href="http://200.200.169.163/" style="color: #01AAED" target="_blank">http://200.200.169.163/</a></td>
+        <td>redmine的bug管理平台</td>
+      </tr>
+      <tr>
+        <td><a  href="http://200.200.107.200:8080/index.php?s=/webui&page_id=281" target="_blank">前端showdoc平台</a></td>
+        <td><a  href="http://200.200.107.200:8080/index.php?s=/webui&page_id=281" style="color: #01AAED" target="_blank">http://200.200.107.200:8080/index.php?s=/webui&page_id=281</a></td>
+        <td>查看web接口的字段定义，基于showdoc</td>
+      </tr>
+
+      <tr>
+        <td><a href="http://200.200.169.55/showdoc/index.php?s=/home/item/index" target="_blank">测试showdoc平台</a></td>
+        <td><a href="http://200.200.169.55/showdoc/index.php?s=/home/item/index" style="color: #01AAED" target="_blank">http://200.200.169.55/showdoc/index.php?s=/home/item/index</a></td>
+        <td>基于showdoc；初始用户：名字首字母小写；例如：用户名wxf;密码wxf</td>
+      </tr>
+      <tr>
+        <td><a href="https://trello.com/" target="_blank">trello</a></td>
+        <td><a href="https://trello.com/" style="color: #01AAED" target="_blank">https://trello.com/</a></td>
+        <td>测试clecklist</td>
+      </tr>
+      <tr>
+          <td><a href="http://200.200.107.200/#" target="_blank">web升级平台</a></td>
+        <td><a href="http://200.200.107.200/#" style="color: #01AAED" target="_blank">http://200.200.107.200/#</a></td>
+        <td>用于打包和升级web应用，一般由研发打包</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>总部友情链接</legend>
+</fieldset>
+
+<div class="layui-form">
+  <table class="layui-table">
+    <colgroup>
+      <col width="150">
+      <col width="150">
+      <col width="200">
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+        <th>描述</th>
+        <th>地址</th>
+        <th>备注</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><a  href="http://200.200.0.17/cms/supesite/m.php?name=creative" target="_blank">创新平台</a></td>
+        <td><a  href="http://200.200.0.17/cms/supesite/m.php?name=creative" style="color: #01AAED" target="_blank">http://200.200.0.17/cms/supesite/m.php?name=creative</a></td>
+        <td>提交创新，每月一次</td>
+      </tr>
+    <tr>
+        <td><a  href="http://200.200.0.33/ss" target="_blank">测试帮助文档</a></td>
+        <td><a  href="http://200.200.0.33/ss" style="color: #01AAED" target="_blank">http://200.200.0.33/ss</a></td>
+        <td>各种测试帮助文档，一个总的测试管理平台，由测试中心维护</td>
+      </tr>
+    <tr>
+        <td><a  href="http://200.200.0.37/tp/help/index.html#introduction:" target="_blank">总部TP资料</a></td>
+        <td><a  href="http://200.200.0.37/tp/help/index.html#introduction:" style="color: #01AAED" target="_blank">http://200.200.0.37/tp/help/index.html#introduction:</a></td>
+        <td>包括案例设计方法等文档</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  </div>
+
+
+<script src="/static/poll/layui.js"></script>
+<script>
+//JavaScript代码区域
+layui.use('element', function(){
+  var element = layui.element;
+
+});
+
+
+</script>
+<script>
+</script>
+<script type="text/html" id="titleTpl">
+  <li><a href="{% url 'poll:detail' 2 %}">111</a></li>
+</script>
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-mini" lay-event="detail">详情</a>
+  <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+  <!-- 这里同样支持 laytpl 语法，如： -->
+  <a class="layui-btn layui-btn-mini" lay-event="check">刷新</a>
+</script>
+</html>

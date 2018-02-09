@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<!--
+<object type="text/x-scriptlet" data="/static/poll/page/top.html" width=100% height=60></object>
+<object type="text/x-scriptlet" data="/static/poll/page/left.html" width=200 height=100%></object>
+-->
+<head>
+	<meta charset="utf-8">
+	<title>Bootstrap 实例 - 内联表单</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.css">
+</head>
+<body>
+<br>
+
+<form id="debugform" class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="firstname" class="col-sm-1 control-label">服务器</label>
+    <div class="col-sm-2">
+      <input name="serverip" type="text" class="form-control" id="firstname" placeholder="服务器ip">
+    </div>
+       <label for="lastname" class="col-sm-1 control-label">ssh用户</label>
+    <div class="col-sm-2">
+      <input name="username" type="text" class="form-control" id="lastname" placeholder="默认root">
+    </div>
+        <label for="lastname" class="col-sm-1 control-label">root密码</label>
+    <div class="col-sm-2">
+      <input name="password" type="text" class="form-control" id="lastname" placeholder="默认moatest">
+    </div>
+  </div>
+  <div class="form-group">
+     <label for="logina" class="col-sm-1 control-label">是否需要登陆</label>
+         <div class="col-sm-2">
+    <select id="logina" name="needlogin" class="form-control">
+      <option value="0">是</option>
+      <option value="1">否</option>
+    </select>
+         </div>
+        <label for="lastname" class="col-sm-1 control-label">手机号</label>
+    <div class="col-sm-2">
+      <input type="text" name="phone" class="form-control" id="lastname" placeholder="手机号">
+    </div>
+        <label for="lastname" class="col-sm-1 control-label">密码</label>
+    <div class="col-sm-2">
+      <input type="text" name="phonepwd" class="form-control" id="lastname" value="12345">
+    </div>
+  </div>
+
+ <div class="form-group">
+    <label for="logina" class="col-sm-1 control-label">选择服务码</label>
+         <div class="col-sm-4">
+     <select id="bs3Select" name="srvcode" class="selectpicker show-tick form-control" placeholder="" data-live-search="true">
+                        <option value="" selected>srvcode</option>
+                        <!--下面通过ajax去获取和修改-->
+                    </select>
+         </div>
+     <label for="logina" class="col-sm-2 control-label">选择操作码</label>
+         <div class="col-sm-4" id="interfacediv">
+      <select id="interface" name="oprcode" class="selectpicker show-tick form-control" placeholder="" data-live-search="true">
+                        <option value="" selected>interface</option>
+                        <!--下面通过ajax去获取和修改-->
+                        <!--加上监控select值的变化，实时获取模板-->
+                    </select>
+         </div>
+ </div>
+  <div class="form-group">
+    <label for="name" class="col-sm-1 control-label">请求</label>
+      <div class="col-sm-2">
+    <textarea id="requestion" name="descjson" class="form-control" rows="4" style="width: 900px"></textarea>
+      </div>
+  </div>
+  <div class="form-group">
+    <label for="name" class="col-sm-1 control-label">响应</label>
+      <div class="col-sm-2">
+    <textarea id="response" name="Reqdescjson" class="form-control" rows="10" style="width:900px"></textarea>
+      </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+        <button id="submit" type="button" class="btn btn-primary">调试</button>
+
+        <!--不加type会自动更新-->
+    </div>
+    <div class="col-sm-1 control-label">
+        <button id="savecase" type="button" class="btn btn-primary">保存测试案例</button>
+
+        <!--不加type会自动更新-->
+    </div>
+      <div class="col-sm-2 control-label">
+        <button id="reset" type="button" class="btn btn-primary">重置</button>
+
+        <!--不加type会自动更新-->
+    </div>
+  </div>
+</form>
+<script type="text/javascript">
+        $(window).on('load', function () {
+             $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/testu/",
+            //提交的数据
+            data:'{"action":"GetSrv","data":{"serverip":"","username":"","password":""}}',
+            //返回数据的格式
+          //  datatype: "json",
+            //在请求之前调用的函数
+           // beforeSend:function(){$("#msg").html("logining");},
+            //成功返回之后调用的函数
+            success:function(data){
+                //console.log(data.toString())
+                var jsondata = eval("("+data+")"); //不知道为什么一定要加入这个才可以
+                for(var i = 0;i<jsondata["srv"].length;i++){
+                    $("#bs3Select").append("<option value="+jsondata["srv"][i]["srvcode"]+">"+jsondata["srv"][i]["srvname"]+"</option>")
+
+                }
+                $('#bs3Select').selectpicker('refresh'); //加上这个可以实时刷新，不然不会刷新
+          // $("#msg").html(decodeURI(data));
+            },
+            //调用执行后调用的函数
+            //complete: function(XMLHttpRequest, textStatus){
+              // alert(XMLHttpRequest.responseText);
+               //alert(textStatus);
+                //HideLoading()
+         });
+
+        });
+        $(document).ready(function(){
+            //下面监听不到select的点击时间，只能监听到div的监听事件,点击获取接口，可以通过监听选择服务码的改变来监听
+            /*
+  $("#interfacediv").click(function(){
+      //这一个效率不太好，后面优化，还有没有共用ssh，导致资源占用很高
+    $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/testu/",
+            //提交的数据
+            data:"{\"action\":\"GetInterface\",\"data\":{\"serverip\":\"\",\"username\":\"\",\"password\":\"\",\"srv\":\""+$("#bs3Select").val()+"\"}}",
+            success:function(data){
+                //console.log(data.toString())
+                console.log(data)
+                var jsondata = eval("("+data+")"); //不知道为什么一定要加入这个才可以
+                for(var i = 0;i<jsondata["srv"].length;i++){
+                    $("#interface").append("<option value="+jsondata["srv"][i]["srvcode"]+">"+jsondata["srv"][i]["srvname"]+"</option>")
+                }
+                $('#interface').selectpicker('refresh'); //加上这个可以实时刷新，不然不会刷新
+            },
+
+         });
+  });*/
+            //优化通过选择服务码改变来获取新的接口
+            $("#bs3Select").change(function () {
+                  $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/testu/",
+            //提交的数据
+            data:"{\"action\":\"GetInterface\",\"data\":{\"serverip\":\"\",\"username\":\"\",\"password\":\"\",\"srv\":\""+$("#bs3Select").val()+"\"}}",
+            success:function(data){
+                //console.log(data.toString())
+                var jsondata = eval("("+data+")"); //不知道为什么一定要加入这个才可以
+                $("#interface").empty()
+                $("#interface").append("<option value=\"\" selected>interface</option>")
+                for(var i = 0;i<jsondata["srv"].length;i++){
+                    $("#interface").append("<option value="+jsondata["srv"][i]["srvcode"]+">"+jsondata["srv"][i]["srvname"]+"</option>")
+                }
+                $('#interface').selectpicker('refresh'); //加上这个可以实时刷新，不然不会刷新
+            },
+
+         });
+            });
+            //选择值改变获取模板
+   $("#interface").change(function () {
+        $.ajax({
+            //提交数据的类型 POST GET
+            type:"POST",
+            //提交的网址
+            url:"/poll/testu/",
+            //提交的数据
+            data:"{\"action\":\"GetModel\",\"data\":{\"serverip\":\"\",\"username\":\"\",\"password\":\"\",\"interface\":\""+$("#interface").val()+"\"}}",
+            success:function(data){
+                //console.log(data.toString())
+                console.log(data)
+                $("#requestion").val(data);
+            },
+         });
+            });
+});
+    //发送请求数据
+
+    $("#submit").click(function (data) {
+        //为什么会刷新页面
+   //  var data = $("#debugform").serialize()
+      var data = $("#debugform").serializeArray()
+        var obj = {};
+      $.each(data,function (i,v) {
+          obj[v.name] = v.value;
+      })
+        $.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/testu/",
+                data:JSON.stringify({"action":"debug","data":obj}),
+
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出,但是却无法使用json方法了
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因}
+                success: function(result){
+                $("#phoneid").hide();
+                $("#response").val(result);
+                console.log(result)
+        },
+        error: function (str) {
+
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+    })
+
+    </script>
+</body>
+</html>

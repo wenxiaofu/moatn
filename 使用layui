@@ -1,0 +1,5 @@
+1 layui中使用jquery
+layui已经集成了jquery的使用，支持发送ajax请求，所以不需要额外引入jquery。只是使用方法和jquery稍微有点不一样；
+参照：tool.html   基础jquery的使用，参照jqueryuse.html
+问题：手动引入jquery以后，layui不太正常，调试会报错
+原因:引入jquery以后，不再会引入layui.js了

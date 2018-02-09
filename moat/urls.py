@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^moatprivate/', include('moatprivate.urls',namespace="moatprivate")),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^poll/', include('poll.urls',namespace="poll")),
+  #  url(r'^moatool/', include('moatool.urls',namespace="moatool")),
 ]
