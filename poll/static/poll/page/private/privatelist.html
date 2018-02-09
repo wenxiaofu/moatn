@@ -8,9 +8,10 @@
 <div class="layui-body" style="background:#e2e2e2; color:#2E2D3C">
     <!-- 内容主体区域 -->
     <br>
-      <button id="b01" class="layui-btn-small">注册私有云</button>
-          <button id="b02" class="layui-btn-small">创建私有云</button>
-           <button id="b03" class="layui-btn-small">搜索用户和公司信息</button>
+
+    <input id="info" name="info" placeholder="用户名或者did" style="height:25px;width: 200px">
+       <a id="search" class="layui-btn" style="height: 30px"><i class="layui-icon">&#xe615;</i></a>
+<button id="b01" class="layui-btn-small">注册私有云</button>
 
 
       <table id="demo" class="layui-table" lay-data="{page:true, id:'test'}" lay-filter="test"></table>
@@ -34,7 +35,7 @@ layui.use(['jquery','layer'],function () {
                 layer.open({
                 type: 2,
                 content: ['/static/poll/page/private/addprivate.html'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                area: ['900px', '600px'],
+                area: ['800px', '550px'],
                 end: function () {
                     layui.use('table', function(){
   var table = layui.table;
@@ -115,11 +116,26 @@ table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test�
                 layer.open({
                 type: 2,
                 content: ['/static/poll/page/testcase/Bootstrap.html'], //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                area: ['1000px', '650px']
+                area: ['900px', '550px']
                 });
 
 });
+         $("#search").click(function(){
+                layer.open({
+                      type: 2,
+                      title: "结果",
+                      closeBtn: 1, //不显示关闭按钮
+                      shade: [0],
+                      area: ['900px', '400px'],
+                      offset: 'rb',
+                      anim: 2,
+                      content: ['/poll/private/?action=search&keyword='+ document.getElementById("info").value , 'yes'], //iframe的url，no代表不显示滚动条
+                      end: function(){ //此处用于演示
 
+  }
+});
+
+});
 
 
     /***    $("#b01").click(function(){

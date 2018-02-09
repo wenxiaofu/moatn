@@ -139,6 +139,7 @@ def private(request):
         python2json["page"] = request.GET.get("page")
         python2json["limit"] = request.GET.get("limit")
         python2json["code"] = 0
+        python2json["keyword"] = request.GET.get("keyword")
         data = json.dumps(python2json, ensure_ascii=False)
         pv = privateR()
         return HttpResponse(privateR.Privateroute(pv, data))

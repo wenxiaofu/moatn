@@ -114,6 +114,31 @@ class privateR():
         data = json.dumps(python2json, ensure_ascii=False)
         print(data)
         return data
+    def search(self,str):
+        if(len(str)==11):
+            print("搜索手机号")
+            cmd = "get_user_info "+str
+            result = sendCmd(self.cloudip, self.username, self.pwd,
+                         cmd)
+            result = result.replace("\n", "<br>");#这个地方为了适应layyui的弹窗，把换行符换成了<br>
+            return result
+        elif(len(str) <= 3):
+            print("搜索srvid")
+            #从数据库查询结果，返回详情
+        else:
+            print("搜索公司信息")
+            cmd = "mdbg -p 21120 -o exportdomain did="+str
+            #先查询到servid，在从数据查询结果。可是显示怎么显示？？
+            result = sendCmd(self.cloudip, self.username, self.pwd,
+                         cmd)
+            #提取srvid
+            srvid = re.findall(r"srvid\((.+?)\)", result)
+            srvid = srvid[0]
+            print(srvid)
+            #查询详情
+            data = self.Getdetail(int(srvid))
+            return data
+            #获取到
 
     def EditPrivate(self):
         pass
@@ -139,7 +164,10 @@ class privateR():
         if (jdata["action"] == "GetInstalledPrivate"):
             result = self.GetInstalledPrivate(jdata["page"],jdata["limit"])
             return result
-
+        if (jdata["action"] == "search"):
+            result = self.search(jdata["keyword"])
+            print(result)
+            return result
     if __name__ == "__main__":
 
        str =  '''
