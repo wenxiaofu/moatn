@@ -83,8 +83,8 @@ DATABASES = {
         'NAME': 'moat',#数据库名
         'USER':'root',#数据库用户名
         'PASSWORD':'sangfordb',#数据库密码
-        'HOST':'200.200.169.212',#数据库地址不写为本地
-        'PORT':'3305', #数据库端口
+        'HOST':'localhost',#数据库地址不写为本地
+        'PORT':'3306', #数据库端口
         #采用非严格模式，这样model里面的字段就不用设置默认值了
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'" ,

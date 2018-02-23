@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8f3ebd1-6158-466b-aac8-7e950e23f87e" name="Default" comment="20171027使用layui进行操作">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/poll/static/poll/page/private/privatedetail.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/moat/settings.py" afterPath="$PROJECT_DIR$/moat/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/moat/urls.py" afterPath="$PROJECT_DIR$/moat/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/moatprivate/models.py" afterPath="$PROJECT_DIR$/moatprivate/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/poll/mfunc/private/PrivateRoute.py" afterPath="$PROJECT_DIR$/poll/mfunc/private/PrivateRoute.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/poll/models.py" afterPath="$PROJECT_DIR$/poll/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/poll/static/poll/page/private/addprivate.html" afterPath="$PROJECT_DIR$/poll/static/poll/page/private/addprivate.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/poll/static/poll/page/private/privatelist.html" afterPath="$PROJECT_DIR$/poll/static/poll/page/private/privatelist.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/poll/urls.py" afterPath="$PROJECT_DIR$/poll/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/poll/views.py" afterPath="$PROJECT_DIR$/poll/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -903,7 +894,14 @@
       <option name="project" value="LOCAL" />
       <updated>1519387961287</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="20171027使用layui进行操作&#10;urls.py改动&#10;workflowid = models.CharField(max_length=100, default=&quot;&quot;)&#10;question = models.ForeignKey(Question,on_delete=models.CASCADE)&#10;项目的url增加：&#10;app_name='poll'&#10;from django.core.urlresolvers import reverse&#10;改成&#10;from django.urls import reverse">
+      <created>1519389307889</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1519389307889</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -953,7 +951,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="11" />
     <MESSAGE value="20171027使用layui进行操作" />
-    <option name="LAST_COMMIT_MESSAGE" value="20171027使用layui进行操作" />
+    <MESSAGE value="20171027使用layui进行操作&#10;urls.py改动&#10;workflowid = models.CharField(max_length=100, default=&quot;&quot;)&#10;question = models.ForeignKey(Question,on_delete=models.CASCADE)&#10;项目的url增加：&#10;app_name='poll'&#10;from django.core.urlresolvers import reverse&#10;改成&#10;from django.urls import reverse" />
+    <option name="LAST_COMMIT_MESSAGE" value="20171027使用layui进行操作&#10;urls.py改动&#10;workflowid = models.CharField(max_length=100, default=&quot;&quot;)&#10;question = models.ForeignKey(Question,on_delete=models.CASCADE)&#10;项目的url增加：&#10;app_name='poll'&#10;from django.core.urlresolvers import reverse&#10;改成&#10;from django.urls import reverse" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
