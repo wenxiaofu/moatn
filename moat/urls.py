@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+    #注释
     url(r'^moatprivate/', include('moatprivate.urls',namespace="moatprivate")),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^poll/', include('poll.urls',namespace="poll")),
