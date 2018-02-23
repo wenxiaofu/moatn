@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加私有云</title>
+    <link rel="stylesheet" href="/static/poll/css/layui.css">
+</head>
+<body>
+{% if private_list %}
+    <ul>
+    {% for private in private_list %}
+        <!--
+        <li>私有云名称：{{ private.name }}</li>
+        <li>srv_id：{{ private.srv_id }}</li>
+        -->
+        <form class="layui-form" action="">
+
+  <div class="layui-form-item">
+<div style="visibility:hidden; display:none">
+      <input type="text" name="srv_id" type="hidden" value={{ private.srv_id }} placeholder={{ private.srv_id }} autocomplete="off" class="layui-input">
+</div>
+    <label class="layui-form-label">名称：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="name" value={{ private.name }} placeholder={{ private.name }} autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+      <label class="layui-form-label">人数：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="num" value={{ private.num }} autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+    <div class="layui-form-item">
+    <label class="layui-form-label">通讯录：</label>
+     <div class="layui-input-inline">
+      <input type="text" name="asyncphone" value={{ private.asyncphone }} placeholder={{ private.asyncphone }}(1代表未同步) autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+        <label class="layui-form-label">接入方式：</label>
+     <div class="layui-input-inline">
+      <input type="text" name="is_lan" value={{ private.is_lan }} placeholder={{ private.is_lan }}(1代表内网) autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+     <div class="layui-form-item">
+    <label class="layui-form-label">外网ip：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="pc_ip" value={{ private.pc_ip }} autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+         <label class="layui-form-label">流程单号：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="workflowid" placeholder={{ private.workflowid }} autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+ <div class="layui-form-item">
+    <label class="layui-form-label">创建时间：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="begin_time" value={{ private.begin_time }} autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+         <label class="layui-form-label">过期时间：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="end_time" value={{ private.end_time }} autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+    <hr class="layui-bg-green">
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">mdbg执行结果</label>
+    <div class="layui-input-block">
+      <textarea id="response" name="mdbgrsp" placeholder={{ private.mdbgrsp }} class="layui-textarea"></textarea>
+    </div>
+  </div>
+            <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">安装过程命令</label>
+    <div class="layui-input-block">
+      <textarea id="response" name="install_way" placeholder={{ private.install_way }} class="layui-textarea"></textarea>
+    </div>
+  </div>
+            <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">注册结果</label>
+    <div class="layui-input-block">
+      <textarea id="response" name="install_way" placeholder={{ private.regresult }} class="layui-textarea"></textarea>
+    </div>
+  </div>
+            <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">其他备注</label>
+    <div class="layui-input-block">
+      <textarea id="response" name="other" placeholder={{ private.other }} class="layui-textarea">{{ private.other }}</textarea>
+    </div>
+  </div>
+ <div class="layui-form-item">
+    <div class="layui-input-block">
+         <button class="layui-btn layui-btn-small" lay-submit lay-filter="formDemo">保存编辑</button>
+    </div>
+  </div>
+</form>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+<script src="/static/poll/layui.js"></script>
+<script>
+//Demo
+layui.use(['form','jquery','layer'], function(){
+  var form = layui.form;
+  var $ = layui.$
+  var layer = layui.layer
+  form.on('select(logaaa)',function (data) {
+
+      //如果选择否则增加两个输入框
+      if(data.value == 1){
+          //使用jquery添加页面元素
+        $("#phoneid").hide();
+       // $("#phonepwd").remove();remove找不回来，用hide
+        $("#phonepwd").hide();
+      }else {
+        $("#phoneid").show();
+        $("#phonepwd").show();
+      }
+
+  });
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+      console.log(JSON.stringify(data.field));
+     htmlobj=$.ajax({
+                type:"post",
+                async:false,
+                url:"/poll/private/",
+                data:JSON.stringify({"action":"Editprivate","data":data.field}),
+
+                //data:'{"data": [{"question_text": "testweew"}, {"question_text": "这是一个大问题"}], "count": 1}',
+                //上面加上单引号，可以中文输出,但是却无法使用json方法了
+             //   dataType: "json", 加上这个会导致下面的alert无法执行，不知道原因}
+                success: function(result){
+              //  $("#phoneid").hide();
+             //   $("#response").val(result);
+             //   console.log(result)
+                    alert(result)
+        },
+        error: function (str) {
+
+            $("#request-process-patent").html("提交数据失败！");
+        }
+            });
+    //layer.msg(JSON.stringify(data.field));
+    console.log(JSON.stringify(data.field));
+   // $("#response").val(result);
+    return false;
+  });
+});
+
+
+</script>
+</body>
+</html>
