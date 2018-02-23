@@ -49,6 +49,7 @@ class Private(models.Model):
     regresult = models.TextField(default="")
     install_way = models.TextField(default="")
     other = models.TextField(default="")
+    workflowid = models.CharField(max_length=100, default="")
     class Meta:
         verbose_name = '私有云'
         verbose_name_plural = '私有云'
@@ -70,7 +71,7 @@ class Question(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 class Choice(models.Model):
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question,on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
     def __str__(self):  # __unicode__ on Python 2

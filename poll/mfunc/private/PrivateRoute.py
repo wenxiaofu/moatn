@@ -48,6 +48,16 @@ class privateR():
         pv.save()
         print(result)
         return result
+    #接收一个json 对象
+    def Editprivate(self,jdata):
+        try:
+            pr = Private.objects.filter(srv_id=jdata["data"]["srv_id"]).update(name=jdata["data"]["name"], num=jdata["data"]["num"],
+                                                                          asyncphone=int(jdata["data"]["asyncphone"]), pc_ip=jdata["data"]["pc_ip"],
+            is_lan=jdata["data"]["is_lan"],other=jdata["data"]["other"],begin_time=jdata["data"]["begin_time"],end_time=jdata["data"]["end_time"])
+            return "保存成功"
+        except KeyError as e:
+            return e
+
 
     def Getdetail(self,srvid):
         latest_question_list = Private.objects.filter(srv_id=srvid).values("srv_id","name","status","pc_ip","asyncphone",
@@ -65,6 +75,7 @@ class privateR():
     #查询已经安装的私有云
     def GetInstalledPrivate(self,page,limit):
         #先执行mdbg命令查询出所有的私有云
+        '''
         result = sendCmd(self.cloudip, self.username, self.pwd,
                          "mdbg -i servermap.moa.kdzl.cn -p 21120 -o exportserver|grep is_private_cloud\(1\)")
         pr_list = result.split("\n")
@@ -90,6 +101,7 @@ class privateR():
             pr = Private.objects.filter(srv_id=srvid).update(status=status,name=name,mdbgrsp=pr_list[i],pc_ip=entryip)
             # 测试账号
         print("保存成功")
+        '''
         #再查询数据库里面的数据，返回给列表,先使用切片分页了
         latest_question_list = Private.objects.all().order_by("-srv_id").values("srv_id", "name", "status", "pc_ip",
                                                       "asyncphone",
@@ -140,9 +152,6 @@ class privateR():
             return data
             #获取到
 
-    def EditPrivate(self):
-        pass
-
     def Privateroute(self,str):
         print(str)
         jdata = json.loads(str)
@@ -167,6 +176,9 @@ class privateR():
         if (jdata["action"] == "search"):
             result = self.search(jdata["keyword"])
             print(result)
+            return result
+        if (jdata["action"] == "Editprivate"):
+            result = self.Editprivate(jdata)
             return result
     if __name__ == "__main__":
 

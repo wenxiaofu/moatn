@@ -10,9 +10,9 @@
     <br>
 
     <input id="info" name="info" placeholder="用户名或者did" style="height:25px;width: 200px">
-       <a id="search" class="layui-btn" style="height: 30px"><i class="layui-icon">&#xe615;</i></a>
-<button id="b01" class="layui-btn-small">注册私有云</button>
-
+       <a id="search" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe615;</i></a>
+<button id="b01" class="layui-btn layui-btn-small">注册私有云</button>
+<button id="b02" class="layui-btn layui-btn-small">私有云常见问题</button>
 
       <table id="demo" class="layui-table" lay-data="{page:true, id:'test'}" lay-filter="test"></table>
 </div>
@@ -81,29 +81,6 @@ table.render({
   }
 
   //,…… //更多参数参考右侧目录：基本参数选项
-});
-table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-  var data = obj.data; //获得当前行数据
-  var layEvent = obj.event; //获得 lay-event 对应的值
-  var tr = obj.tr; //获得当前行 tr 的DOM对象
-
-  if(layEvent === 'detail'){ //查看
-    //do somehing，弄一个弹窗，显示详情信息
-
-  } else if(layEvent === 'del'){ //删除
-    layer.confirm('真的删除行么', function(index){
-      obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-      layer.close(index);
-      //向服务端发送删除指令
-    });
-  } else if(layEvent === 'edit'){ //编辑
-    //do something向服务端发送保存命令
-    //同步更新缓存对应的值
-    obj.update({
-      username: '123'
-      ,title: 'xxx'
-    });
-  }
 });
 });
                  //   refleshztree();//单独删除某一个
@@ -211,6 +188,18 @@ table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test�
 
   if(layEvent === 'detail'){ //查看
     //do somehing，弄一个弹窗，显示详情信息
+    layer.open({
+                      type: 2,
+                      title: "结果",
+                      closeBtn: 1, //不显示关闭按钮
+                      shade: [0],
+                      area: ['900px', '560px'],
+                      anim: 2,
+                      content: ['/poll/private/?action=detail&srvid='+ data.srv_id , 'yes'], //iframe的url，no代表不显示滚动条
+                      end: function(){ //此处用于演示
+
+  }
+});
 
   } else if(layEvent === 'del'){ //删除
     layer.confirm('真的删除行么', function(index){
@@ -234,6 +223,7 @@ table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test�
 </script>
 <script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-mini" lay-event="detail">详情</a>
+  <!--
   <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
   <!-- 这里同样支持 laytpl 语法，如： -->

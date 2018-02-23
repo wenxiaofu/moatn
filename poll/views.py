@@ -3,7 +3,7 @@ from django.http import HttpResponse,JsonResponse
 from django.template import loader
 from django.http import HttpResponseRedirect
 from .models import *
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from poll.mfunc.sshclient import verification_ssh
 from poll.mfunc.routing import routing
 from poll.mfunc.Interfaceroute import Interfacerouting
@@ -142,6 +142,11 @@ def private(request):
         python2json["keyword"] = request.GET.get("keyword")
         data = json.dumps(python2json, ensure_ascii=False)
         pv = privateR()
+        if request.GET.get("action") == "detail":
+            #查询数据库
+            private_list = Private.objects.filter(srv_id=request.GET.get("srvid"))
+            context = {'private_list': private_list}
+            return render(request, 'privatedetail.html', context)
         return HttpResponse(privateR.Privateroute(pv, data))
     else:
         return HttpResponse("参数错误")
